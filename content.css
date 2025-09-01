@@ -1,0 +1,198 @@
+/*
+  Elegant styles and animations for the Email Writer Extension UI
+  Targets only our injected elements to avoid interfering with Gmail UI
+*/
+
+:root {
+  --ew-primary: #6a5cff;
+  --ew-primary-2: #8b5cf6;
+  --ew-accent: #22d3ee;
+  --ew-bg: #ffffff;
+  --ew-text: #1f2937;
+  --ew-muted: #6b7280;
+  --ew-border: rgba(0, 0, 0, 0.1);
+  --ew-shadow: 0 6px 18px rgba(0,0,0,0.12), 0 2px 6px rgba(0,0,0,0.08);
+  --ew-focus: rgba(34, 211, 238, 0.45);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ew-bg: #0f1115;
+    --ew-text: #e5e7eb;
+    --ew-muted: #9ca3af;
+    --ew-border: rgba(255, 255, 255, 0.12);
+    --ew-shadow: 0 6px 18px rgba(0,0,0,0.45), 0 2px 6px rgba(0,0,0,0.3);
+    --ew-focus: rgba(107, 114, 128, 0.55);
+  }
+}
+
+/* Smooth entrance for injected controls */
+@keyframes ew-fade-slide-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Accent glow for focus states */
+@keyframes ew-glow {
+  0% { box-shadow: 0 0 0 0 var(--ew-focus); }
+  100% { box-shadow: 0 0 0 8px rgba(34, 211, 238, 0); }
+}
+
+/* Subtle shimmer for the button background */
+@keyframes ew-shimmer {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Spinner for generating state */
+@keyframes ew-spin { to { transform: rotate(360deg); } }
+
+/* Textarea styling */
+.email-writer-prompt-input {
+  appearance: none;
+  background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.7));
+  color: var(--ew-text);
+  border: 1px solid var(--ew-border) !important;
+  border-radius: 12px !important;
+  padding: 10px 12px !important;
+  outline: none;
+  width: 100% !important;
+  min-height: 72px !important;
+  resize: vertical !important;
+  box-shadow: var(--ew-shadow);
+  transition: box-shadow 200ms ease, transform 150ms ease, border-color 200ms ease;
+  animation: ew-fade-slide-in 220ms ease both;
+  font-size: 13px !important;
+  line-height: 1.35 !important;
+  backdrop-filter: saturate(1.1) blur(2px);
+}
+
+.email-writer-prompt-input::placeholder {
+  color: var(--ew-muted);
+}
+
+.email-writer-prompt-input:hover {
+  transform: translateY(-1px);
+}
+
+.email-writer-prompt-input:focus {
+  border-color: transparent !important;
+  box-shadow: 0 0 0 2px var(--ew-accent), var(--ew-shadow);
+  animation: ew-glow 800ms ease-out;
+}
+
+/* AI Reply button styling */
+.ai-reply-button {
+  position: relative;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 14px !important;
+  border: none !important;
+  border-radius: 999px !important;
+  cursor: pointer;
+  color: #fff !important;
+  background: linear-gradient(120deg, var(--ew-primary), var(--ew-primary-2), var(--ew-accent));
+  background-size: 200% 200%;
+  text-shadow: 0 1px 1px rgba(0,0,0,0.15);
+  box-shadow: var(--ew-shadow);
+  transition: transform 120ms ease, box-shadow 180ms ease, filter 200ms ease, opacity 200ms ease;
+  animation: ew-shimmer 6s ease infinite;
+  font-weight: 600;
+  user-select: none;
+  will-change: transform, box-shadow;
+}
+
+/* Ensure spacing within Gmail toolbar */
+.ai-reply-button { margin-right: 8px !important; }
+
+.ai-reply-button:hover {
+  transform: translateY(-1px) scale(1.01);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.18), 0 3px 8px rgba(0,0,0,0.12);
+  filter: brightness(1.03);
+}
+
+.ai-reply-button:active {
+  transform: translateY(0) scale(0.99);
+}
+
+/* Ripple effect on click using a pseudo-element */
+.ai-reply-button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.35), transparent 45%);
+  opacity: 0;
+  transition: opacity 400ms ease;
+  pointer-events: none;
+}
+
+.ai-reply-button:active::after { opacity: 1; transition-duration: 120ms; }
+
+/* Generating state visuals */
+.ai-reply-button[disabled] {
+  opacity: 0.9;
+  cursor: wait !important;
+  filter: saturate(0.9) brightness(0.98);
+}
+
+.ai-reply-button[disabled]::before {
+  content: "";
+  width: 14px; height: 14px;
+  border: 2px solid rgba(255,255,255,0.55);
+  border-top-color: rgba(255,255,255,0.1);
+  border-radius: 50%;
+  animation: ew-spin 800ms linear infinite;
+  position: absolute;
+  left: 10px; /* spinner on left side */
+}
+
+/* Nicer tooltip styling for supported elements */
+.ai-reply-button[data-tooltip],
+.email-writer-prompt-input[data-tooltip] {
+  position: relative;
+}
+
+
+/* Use attribute tooltip fallback for Gmail’s data-tooltip */
+.ai-reply-button[data-tooltip]:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(-4px);
+  background: rgba(17, 24, 39, 0.92);
+  color: #fff;
+  font-size: 11px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  opacity: 0;
+  transition: opacity 160ms ease, transform 160ms ease;
+  z-index: 2;
+}
+
+/* Fine-tune inside Gmail dense areas */
+.btC .email-writer-prompt-input,
+.aDh .email-writer-prompt-input {
+  margin-bottom: 10px !important;
+}
+
+/* Dark mode surface adjustment for textarea background */
+@media (prefers-color-scheme: dark) {
+  .email-writer-prompt-input {
+    background: linear-gradient(180deg, rgba(31,32,36,0.9), rgba(22,24,28,0.85));
+  }
+}
+
+/* Optional: reduce animations for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .ai-reply-button,
+  .email-writer-prompt-input { animation: none !important; transition: none !important; }
+  .ai-reply-button::after { display: none !important; }
+}

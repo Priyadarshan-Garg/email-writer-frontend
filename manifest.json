@@ -1,0 +1,32 @@
+{
+  "name": "Lazy Writer",
+  "description": "AI assisted email writer",
+  "version": "1.0",
+  "manifest_version": 3,
+  "host_permissions": [
+    "https://email-writer-backend-7dlb.onrender.com/*",
+    "*://mail.google.com/*"
+  ],
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["icons/*"],
+      "matches": ["*://mail.google.com/*"]
+    }
+  ],
+  "content_scripts": [
+    {
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "matches": ["*://mail.google.com/*"],
+      "run_at": "document_end"
+    }
+  ],
+  "action": {
+    "default_title": "Email Assistant"
+  }
+
+}
