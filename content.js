@@ -1,4 +1,3 @@
-console.log("Email Writer Extension - Content Script Loaded"); // Print Statement
 
 function createAIButton() {
     const button = document.createElement('div');
