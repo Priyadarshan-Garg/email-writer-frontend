@@ -1,6 +1,6 @@
 {
-  "name": "Lazy Writer",
-  "description": "AI assisted email writer",
+  "name": "Lekhak AI",
+  "description": "Your personal AI email assistant. Generate email replies and content effortlessly, right inside your inbox.",
   "version": "1.0",
   "manifest_version": 3,
   "host_permissions": [
