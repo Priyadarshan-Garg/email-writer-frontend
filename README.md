@@ -93,7 +93,7 @@ This is a Chrome extension. Typical deployment options:
 - Publish to the Chrome Web Store (recommended for distribution)
 - Side-load internally for testing or private use
 
-- Live deployment link: [I'll update it soon]()
+- Live deployment link: [Chrome web store](https://chromewebstore.google.com/detail/lekhak-ai/jeobolaenkjieooidglhehmlnobnimji)
 ---
 ## 🧭 Project Structure (high-level)
 
